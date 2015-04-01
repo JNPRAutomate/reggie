@@ -134,14 +134,14 @@ def index():
 def get_students():
     pods = Student.query.all()
 
-    if request.accept_mimetypes.accept_json and not request.accept_mimetypes.accept_html:
+    if request.accept_mimetypes.accept_json and not request.accept_mimetypes.accept_html and request.method == 'GET':
         return jsonify({ 'pods': [ pod.to_json() for pod in pods] })
 
 @app.route('/student/<int:pod_number>', methods=['GET', 'POST'])
 def get_student(pod_number):
     pod = Student.query.filter_by(pod_number=pod_number).first_or_404()
 
-    if request.accept_mimetypes.accept_json and not request.accept_mimetypes.accept_html:
+    if request.accept_mimetypes.accept_json and not request.accept_mimetypes.accept_html and request.method == 'GET':
         return jsonify(pod.to_json())
 
     return render_template('student.html', username=pod.username, pod_number = pod.pod_number, addr_st0=pod.addr_st0(), addr_lo0=pod.addr_lo0(), addr_wan=pod.addr_wan, known=session.get('known', False))
