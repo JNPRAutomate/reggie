@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block title %}Reggie - {{ username }}{% endblock %}
+
+{% block page_content %}
+<div class="page-header">
+    <div class="profile-header">
+        <h1>{{ username }} in pod: {{pod_number}}</h1>
+    </div>
+    <div>
+        <p>WAN: {{addr_wan}}</p>
+        <p>st0.{{pod_number}}: {{addr_st0}}</p>
+        <p>lo0.0: {{addr_lo0}}</p>
+    </div>
+</div>
+{% endblock %}
