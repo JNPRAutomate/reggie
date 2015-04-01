@@ -1,5 +1,5 @@
 import os
-from flask import Flask, render_template
+from flask import Flask, render_template, render_template, session, redirect, url_for, request, jsonify
 from flask.ext.script import Manager, Shell
 from flask.ext.bootstrap import Bootstrap
 from flask.ext.wtf import Form
@@ -57,6 +57,17 @@ class Student(db.Model):
                 return False
         return False
 
+    def to_json(self):
+        json_student = {
+            'id': self.id,
+            'username': self.username,
+            'pod_number': self.pod_number,
+            'addr_wan': self.addr_wan,
+            'addr_lo0': self.addr_lo0(),
+            'addr_st0': self.addr_st0()
+        }
+        return json_student
+
     def __repr__(self):
         return '<Student {0} @ {1}>'.format(self.username, self.addr_wan)
 
@@ -85,7 +96,6 @@ def db_mock():
 
     return True
 
-
 def make_shell_context():
     return dict(app=app, db=db, Student=Student)
 manager.add_command("shell", Shell(make_context=make_shell_context))
@@ -110,6 +120,22 @@ def index():
         form.name.data = ''
     return render_template('index.html', form=form, name=name)
 
+
+@app.route('/student/', methods=['GET', 'POST'])
+def get_students():
+    pods = Student.query.all()
+
+    if request.accept_mimetypes.accept_json and not request.accept_mimetypes.accept_html:
+        return jsonify({ 'pods': [ pod.to_json() for pod in pods] })
+
+@app.route('/student/<int:pod_number>', methods=['GET', 'POST'])
+def get_student(pod_number):
+    pod = Student.query.filter_by(pod_number=pod_number).first_or_404()
+
+    if request.accept_mimetypes.accept_json and not request.accept_mimetypes.accept_html:
+        return jsonify(pod.to_json())
+
+    return render_template('student.html', username=pod.username, pod_number = pod.pod_number, addr_st0=pod.addr_st0(), addr_lo0=pod.addr_lo0(), addr_wan=pod.addr_wan, known=session.get('known', False))
 
 if __name__ == '__main__':
     manager.run()
