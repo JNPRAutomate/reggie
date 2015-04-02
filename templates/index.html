@@ -1,14 +1,15 @@
 {% extends "base.html" %}
 {% import "bootstrap/wtf.html" as wtf %}
 
-{% block title %}Reggie{% endblock %}
+{% block title %}Reggie - Registration{% endblock %}
 
 {% block page_content %}
 <div class="page-header">
-    <h1>Hello, {% if name %}{{ name }}{% else %}Stranger{% endif %}!</h1>
+    <h2>Welcome to the Juniper Lab Training Session</h2>
 </div>
 <div>
-	 <h2>Welcome to the Juniper Lab Training Session</h2>
+	 It appears that you currently have note registered with our system. Please enter your name below to be assigned a Pod number and IP address details.<p>
 </div>
+<p>
 {{ wtf.quick_form(form) }}
 {% endblock %}

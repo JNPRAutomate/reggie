@@ -119,23 +119,35 @@ def internal_server_error(e):
         return response
     return render_template('500.html'), 500
 
-
 @app.route('/', methods=['GET', 'POST'])
 def index():
     name = None
     form = NameForm()
     if form.validate_on_submit():
-        name = form.name.data
-        form.name.data = ''
-    return render_template('index.html', form=form, name=name)
+        pod = Student()
+        pod.username = form.name.data
+        pod.addr_wan = request.remote_addr
+        db.session.add(pod)
+        db.session.commit()
+        return redirect(url_for('get_student', pod_number=pod.pod_number))
+    
+    temp_pod = Student.query.filter_by(addr_wan=request.remote_addr).first()
 
+    if temp_pod:
+        return redirect(url_for('get_student', pod_number=temp_pod.pod_number))
+
+    return render_template('index.html', form=form, name=name)
 
 @app.route('/student/', methods=['GET', 'POST'])
 def get_students():
     pods = Student.query.all()
-
     if request.accept_mimetypes.accept_json and not request.accept_mimetypes.accept_html and request.method == 'GET':
         return jsonify({ 'pods': [ pod.to_json() for pod in pods] })
+    temp_pod = Student.query.filter_by(addr_wan=request.remote_addr).first()
+
+    if temp_pod:
+        return redirect(url_for('get_student', pod_number=temp_pod.pod_number))
+    return redirect(url_for('index'))
 
 @app.route('/student/<int:pod_number>', methods=['GET', 'POST'])
 def get_student(pod_number):

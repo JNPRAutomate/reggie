@@ -14,13 +14,11 @@ db.session.commit()
 
 w = Student()
 w.username="Damien"
-w.pod_number = w.next_pod()
 db.session.add(w)
 db.session.commit()
 
 x = Student()
 x.username="Yang"
-x.pod_number = x.next_pod()
 db.session.add(x)
 db.session.commit()
 

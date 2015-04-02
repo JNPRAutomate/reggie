@@ -1,11 +1,12 @@
 {% extends "bootstrap/base.html" %}
 
-{% block title %}Reggie{% endblock %}
+{% block title %}Reggie - Student Registration Portal{% endblock %}
 
 {% block head %}
 {{ super() }}
 <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
 <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
 {% endblock %}
 
 {% block navbar %}
@@ -18,7 +19,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="/">Reggie</a>
+            <a href="/" class="logo"><img style="max-width:100px; margin-top: 7px;" src="/static/logo.png"></a>
         </div>
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
@@ -32,6 +33,7 @@
 {% block content %}
 <div class="container">
     {% block page_content %}{% endblock %}
+    {% include '_footer.html' %}
 </div>
 {% endblock %}
 

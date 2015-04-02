@@ -1,16 +1,38 @@
 {% extends "base.html" %}
 
-{% block title %}Reggie - {{ username }}{% endblock %}
+{% block title %}Reggie - Registration :: {{ username }}{% endblock %}
 
 {% block page_content %}
-<div class="page-header">
-    <div class="profile-header">
-        <h1>{{ username }} in pod: {{pod_number}}</h1>
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h4>Student: {{ username }} from Pod {{pod_number}}</h4>
     </div>
-    <div>
-        <p>WAN: {{addr_wan}}</p>
-        <p>st0.{{pod_number}}: {{addr_st0}}</p>
-        <p>lo0.0: {{addr_lo0}}</p>
-    </div>
+  <div class="panel-body">
+    <p>According to our database, you have the following attributes assigned to your lab pod.</p>
+  </div>
+    <table class="table table-hover table-bordered">
+        <thead>
+            <tr><th>Key</th><th>Value</th></tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th scope="row">Pod Number:</th>
+                <td>{{pod_number}}</td>
+            </tr>
+            <tr>
+                <th scope="row">WAN IP Address:</td>
+                <td>{{addr_wan}}</th>
+            </tr>
+            <tr>
+                <th scope="row">st0.{{pod_number}} IP Address:</th>
+                <td>{{addr_st0}}</td>
+            </tr>
+            <tr>
+                <th scope="row">lo0.0 IP Address:</td>
+                <td>{{addr_lo0}}</td>
+            </tr>
+        </tbody>
+    </table>
+
 </div>
 {% endblock %}
