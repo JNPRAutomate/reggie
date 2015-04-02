@@ -61,4 +61,4 @@ target/
 *.sqlite
 
 # Temp ignore Migrations
-migrations/
+#migrations/
