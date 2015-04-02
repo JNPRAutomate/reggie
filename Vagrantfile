@@ -12,8 +12,7 @@ Vagrant.configure(2) do |config|
   
     testvm.vm.synced_folder ".", "/reggie", disabled: false
     
-    testvm.ssh.username = "root" 
-    
+    testvm.ssh.username = "root"
     testvm.vm.provision "shell", inline: <<-SHELL
       sudo apt-get install software-properties-common
       sudo apt-get update -y
@@ -25,7 +24,6 @@ Vagrant.configure(2) do |config|
     SHELL
 
     testvm.ssh.username = "vagrant"
-
     testvm.vm.provision "shell", inline: <<-SHELL
       mkdir ~/.virtualenvs
       export WORKON_HOME=~/.virtualenvs
