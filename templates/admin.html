@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% import "_macros.html" as macros %}
+
+{% block title %}Reggie - Admin Portal{% endblock %}
+
+{% block page_content %}
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h4>Reggie Admin Portal</h4>
+    </div>
+  <div class="panel-body">
+    <p>According to our database, the following students are registered.</p>
+  </div>
+    <table class="table table-hover table-bordered">
+        <thead>
+            <tr><th>Pod Number</th><th>Username</th><th>WAN</th><th>Action</th><th>Delete</th></tr>
+        </thead>
+        <tbody>
+            {% for pod in pods %}
+            <tr>
+                <form id="form-{{pod.pod_number}}" action="{{post_dst}}{{pod.pod_number}}" method="post">
+                    <th scope="row">
+                        <div class="form-group">
+                            <input form="form-{{pod.pod_number}}" class="form-control" type="hidden" name="id" value="{{pod.id}}"/>
+                            <input form="form-{{pod.pod_number}}" class="form-control" type="text" name="pod_number" value="{{pod.pod_number}}"/>
+                        </div>
+                    </th>
+                    <td>
+                        <div class="form-group">
+                            <input form="form-{{pod.pod_number}}" class="form-control" type="text" name="username" value="{{pod.username}}"/>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-group">
+                            <input form="form-{{pod.pod_number}}" class="form-control" type="text" name="addr_wan" value="{{pod.addr_wan}}"/>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-default">Submit</button>
+                        </div>
+                    </td>
+                </form>
+                    <td>
+                        <form id="form-{{pod.pod_number}}-delete" action="{{post_dst}}{{pod.pod_number}}" method="delete">
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-default">Delete</button>
+                        </div></form>
+                    </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+</div>
+{% endblock %}
