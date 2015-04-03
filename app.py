@@ -7,7 +7,7 @@ from wtforms import StringField, SubmitField, IntegerField
 from wtforms.validators import Required
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.migrate import Migrate, MigrateCommand
-from flask.ext.httpauth import HTTPBasicAuth
+from flask.ext.httpauth import HTTPBasicAuth, HTTPDigestAuth
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
@@ -16,12 +16,22 @@ app.config['SECRET_KEY'] = 'reggie_magic_key'
 app.config['SQLALCHEMY_DATABASE_URI'] =\
     'sqlite:///' + os.path.join(basedir, 'data.sqlite')
 app.config['SQLALCHEMY_COMMIT_ON_TEARDOWN'] = True
+app.config['ADMIN_USERS'] = {
+    'admin':'not_verybig_secret'
+}
+
 
 manager = Manager(app)
 bootstrap = Bootstrap(app)
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
+httpauth = HTTPDigestAuth()
 
+@httpauth.get_password
+def get_pw(username):
+    if username in app.config['ADMIN_USERS']:
+        return app.config['ADMIN_USERS'].get(username)
+    return None
 
 class Student(db.Model):
     __tablename__ = 'students'
@@ -210,7 +220,9 @@ def get_student(pod_number):
 
     return render_template('student.html', username=pod.username, pod_number = pod.pod_number, addr_st0=pod.addr_st0(), addr_lo0=pod.addr_lo0(), addr_wan=pod.addr_wan, known=session.get('known', False))
 
-@app.route('/student/<int:pod_number>', methods=['DELETE'])
+#@app.route('/student/<int:pod_number>', methods=['DELETE'])
+@app.route('/admin/delete/<int:pod_number>', methods=['POST'])
+@httpauth.login_required
 def delete_student(pod_number):
     #temp_pod = Student.query.filter_by(pod_number=pod_number).first_or_404()
     #db.session.delete(temp_pod)
@@ -223,10 +235,12 @@ def delete_student(pod_number):
     #pass
 
 @app.route('/admin/', methods=['GET', 'POST'])
+@httpauth.login_required
 def admin():
     post_dst = url_for('get_students')
+    #del_dst = url_for('delete_student')
     pods = Student.query.order_by('pod_number').all()
-    return render_template('admin.html', pods=pods, post_dst=post_dst)
+    return render_template('admin.html', pods=pods, post_dst=post_dst, del_dst="/admin/delete/")
 
 if __name__ == '__main__':
     manager.run()

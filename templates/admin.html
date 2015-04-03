@@ -14,7 +14,15 @@
   </div>
     <table class="table table-hover table-bordered">
         <thead>
-            <tr><th>Pod Number</th><th>Username</th><th>WAN</th><th>Action</th><th>Delete</th></tr>
+            <tr>
+                <th class="col-sm-2">Pod Number</th>
+                <th>Username</th>
+                <th class="col-sm-2">WAN</th>
+                <th class="col-sm-1">lo0</th>
+                <th class="col-sm-1">st0</th>
+                <th class="col-sm-1">Action</th>
+                <th class="col-sm-1">Delete</th>
+            </tr>
         </thead>
         <tbody>
             {% for pod in pods %}
@@ -37,15 +45,29 @@
                         </div>
                     </td>
                     <td>
+                        <div class="form-group" style="font-style: italic">
+                            <span>{{pod.addr_lo0()}}</span>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-group" style="font-style: italic">
+                            <span>{{pod.addr_st0()}}</span>
+                        </div>
+                    </td>
+                    <td>
                         <div class="form-group">
-                            <button type="submit" class="btn btn-default">Submit</button>
+                            <button type="submit" class="btn btn-default btn-sm">
+                                <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span> Submit
+                            </button>
                         </div>
                     </td>
                 </form>
                     <td>
-                        <form id="form-{{pod.pod_number}}-delete" action="{{post_dst}}{{pod.pod_number}}" method="delete">
+                        <form id="form-{{pod.pod_number}}-delete" action="{{del_dst}}{{pod.pod_number}}" method="post">
                         <div class="form-group">
-                            <button type="submit" class="btn btn-default">Delete</button>
+                            <button type="submit" class="btn btn-default btn-sm">
+                                <span class="glyphicon glyphicon-trash" aria-hidden="true"></span> Delete
+                            </button>
                         </div></form>
                     </td>
             </tr>
