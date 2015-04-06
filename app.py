@@ -231,7 +231,7 @@ def delete_student(pod_number):
         db.session.commit()
     except:
         db.session.rollback()
-    return redirect(url_for('index'))
+    return redirect(url_for('admin'))
     #pass
 
 @app.route('/admin/', methods=['GET', 'POST'])
